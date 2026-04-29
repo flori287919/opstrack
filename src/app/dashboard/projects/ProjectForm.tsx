@@ -1,6 +1,10 @@
 type ProjectInitial = {
   project_code?: string | null
   name?: string | null
+  bl_id?: string | null
+  client_id?: string | null
+  beneficiary_id?: string | null
+  project_manager_id?: string | null
   contract_start_date?: string | null
   contract_end_date?: string | null
   project_start_date?: string | null
@@ -16,13 +20,23 @@ type ProjectInitial = {
   notes?: string | null
 }
 
+export type LookupOption = { id: string; label: string }
+
 export function ProjectForm({
   action,
   initial = {},
+  bls,
+  clients,
+  beneficiaries,
+  pms,
   submitLabel = 'Save',
 }: {
   action: (fd: FormData) => Promise<void>
   initial?: ProjectInitial
+  bls: LookupOption[]
+  clients: LookupOption[]
+  beneficiaries: LookupOption[]
+  pms: LookupOption[]
   submitLabel?: string
 }) {
   const v = (k: keyof ProjectInitial) => initial[k] ?? ''
@@ -31,6 +45,13 @@ export function ProjectForm({
       <Section title="Identifikuesit">
         <Field label="Kodi i projektit *" name="project_code" defaultValue={String(v('project_code'))} placeholder="p.sh. 1-IN-21" required />
         <Field label="Emri i projektit *" name="name" defaultValue={String(v('name'))} required />
+        <LookupSelect label="Business Line" name="bl_id" defaultValue={String(v('bl_id'))} options={bls} hrefAdd="/dashboard/lookups" />
+        <LookupSelect label="Project Manager" name="project_manager_id" defaultValue={String(v('project_manager_id'))} options={pms} hrefAdd="/dashboard/lookups" />
+      </Section>
+
+      <Section title="Klienti dhe beneficiary">
+        <LookupSelect label="Klienti" name="client_id" defaultValue={String(v('client_id'))} options={clients} hrefAdd="/dashboard/clients" />
+        <LookupSelect label="Beneficiary" name="beneficiary_id" defaultValue={String(v('beneficiary_id'))} options={beneficiaries} hrefAdd="/dashboard/lookups" />
       </Section>
 
       <Section title="Datat">
@@ -75,35 +96,17 @@ export function ProjectForm({
   )
 }
 
-function Section({
-  title,
-  children,
-  cols = 2,
-}: {
-  title: string
-  children: React.ReactNode
-  cols?: 1 | 2
-}) {
+function Section({ title, children, cols = 2 }: { title: string; children: React.ReactNode; cols?: 1 | 2 }) {
   return (
     <div>
-      <div className="text-xs font-medium uppercase tracking-wide text-slate-500 mb-3">
-        {title}
-      </div>
-      <div className={`grid gap-4 ${cols === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
-        {children}
-      </div>
+      <div className="text-xs font-medium uppercase tracking-wide text-slate-500 mb-3">{title}</div>
+      <div className={`grid gap-4 ${cols === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>{children}</div>
     </div>
   )
 }
 
 function Field({
-  label,
-  name,
-  type = 'text',
-  defaultValue = '',
-  placeholder,
-  required,
-  step,
+  label, name, type = 'text', defaultValue = '', placeholder, required, step,
 }: {
   label: string
   name: string
@@ -130,10 +133,7 @@ function Field({
 }
 
 function Select({
-  label,
-  name,
-  options,
-  defaultValue = '',
+  label, name, options, defaultValue = '',
 }: {
   label: string
   name: string
@@ -149,9 +149,40 @@ function Select({
         className="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 outline-none focus:ring-2 focus:ring-slate-900 bg-white"
       >
         {options.map((o) => (
-          <option key={o} value={o}>
-            {o || '— Zgjidh —'}
-          </option>
+          <option key={o} value={o}>{o || '— Zgjidh —'}</option>
+        ))}
+      </select>
+    </label>
+  )
+}
+
+function LookupSelect({
+  label, name, options, defaultValue = '', hrefAdd,
+}: {
+  label: string
+  name: string
+  options: LookupOption[]
+  defaultValue?: string
+  hrefAdd?: string
+}) {
+  return (
+    <label className="block">
+      <div className="flex items-center justify-between mb-1">
+        <span className="text-sm font-medium text-slate-700">{label}</span>
+        {hrefAdd && (
+          <a href={hrefAdd} target="_blank" rel="noopener" className="text-xs text-slate-500 hover:text-slate-900 underline">
+            + Shto i ri
+          </a>
+        )}
+      </div>
+      <select
+        name={name}
+        defaultValue={defaultValue}
+        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 outline-none focus:ring-2 focus:ring-slate-900 bg-white"
+      >
+        <option value="">— Zgjidh —</option>
+        {options.map((o) => (
+          <option key={o.id} value={o.id}>{o.label}</option>
         ))}
       </select>
     </label>

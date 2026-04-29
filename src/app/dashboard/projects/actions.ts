@@ -41,6 +41,10 @@ function buildPayload(fd: FormData) {
   return {
     project_code: str(fd.get('project_code')),
     name: str(fd.get('name')),
+    bl_id: str(fd.get('bl_id')),
+    client_id: str(fd.get('client_id')),
+    beneficiary_id: str(fd.get('beneficiary_id')),
+    project_manager_id: str(fd.get('project_manager_id')),
     contract_start_date: date(fd.get('contract_start_date')),
     contract_end_date: date(fd.get('contract_end_date')),
     project_start_date: date(fd.get('project_start_date')),

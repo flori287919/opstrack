@@ -37,6 +37,11 @@ export default async function CostsPage({
           </p>
         </div>
         <div className="flex gap-2">
+          {!showDeleted && (
+            <a href="/api/export/costs" className="px-3 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-100 text-slate-700">
+              ↓ Excel
+            </a>
+          )}
           <Link href={showDeleted ? '/dashboard/costs' : '/dashboard/costs?show=deleted'} className="px-3 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-100 text-slate-700">
             {showDeleted ? '← Aktive' : 'Të fshira'}
           </Link>

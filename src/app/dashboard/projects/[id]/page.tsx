@@ -15,11 +15,13 @@ export default async function ProjectDetailPage({
   const { error: errorMsg } = await searchParams
   const supabase = await createClient()
 
-  const { data: project } = await supabase
-    .from('projects')
-    .select('*')
-    .eq('id', id)
-    .single()
+  const [{ data: project }, { data: bls }, { data: clients }, { data: beneficiaries }, { data: pms }] = await Promise.all([
+    supabase.from('projects').select('*').eq('id', id).single(),
+    supabase.from('business_lines').select('id, code, name').is('deleted_at', null).order('code'),
+    supabase.from('clients').select('id, name').is('deleted_at', null).order('name'),
+    supabase.from('beneficiaries').select('id, name').is('deleted_at', null).order('name'),
+    supabase.from('project_managers').select('id, name').is('deleted_at', null).order('name'),
+  ])
 
   if (!project) notFound()
 
@@ -44,11 +46,17 @@ export default async function ProjectDetailPage({
         </div>
       </div>
 
-      {errorMsg && (
-        <div className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm">{errorMsg}</div>
-      )}
+      {errorMsg && <div className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm">{errorMsg}</div>}
 
-      <ProjectForm action={update} initial={project} submitLabel="Ruaj ndryshimet" />
+      <ProjectForm
+        action={update}
+        initial={project}
+        bls={(bls ?? []).map((b) => ({ id: b.id, label: `${b.code} — ${b.name}` }))}
+        clients={(clients ?? []).map((c) => ({ id: c.id, label: c.name }))}
+        beneficiaries={(beneficiaries ?? []).map((b) => ({ id: b.id, label: b.name }))}
+        pms={(pms ?? []).map((p) => ({ id: p.id, label: p.name }))}
+        submitLabel="Ruaj ndryshimet"
+      />
     </div>
   )
 }

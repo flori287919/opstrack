@@ -9,6 +9,7 @@ const NAV = [
   { href: '/dashboard/invoices', label: 'Faturat' },
   { href: '/dashboard/costs', label: 'Kostot' },
   { href: '/dashboard/clients', label: 'Klientët' },
+  { href: '/dashboard/lookups', label: 'Master Data' },
   { href: '/dashboard/audit', label: 'Histori' },
   { href: '/dashboard/settings', label: 'Settings' },
 ]
