@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { friendlyError } from '@/lib/errors'
 
 async function getOrgId() {
   const supabase = await createClient()
@@ -61,7 +62,7 @@ export async function createCostContract(fd: FormData) {
     .from('cost_contracts')
     .insert({ ...payload, org_id: orgId })
   if (error) {
-    redirect(`/dashboard/costs/new?error=${encodeURIComponent(error.message)}`)
+    redirect(`/dashboard/costs/new?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/costs')
   revalidatePath('/dashboard')
@@ -73,7 +74,7 @@ export async function updateCostContract(id: string, fd: FormData) {
   const payload = buildContractPayload(fd)
   const { error } = await supabase.from('cost_contracts').update(payload).eq('id', id)
   if (error) {
-    redirect(`/dashboard/costs/${id}?error=${encodeURIComponent(error.message)}`)
+    redirect(`/dashboard/costs/${id}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/costs')
   revalidatePath('/dashboard')
@@ -127,7 +128,7 @@ export async function createCostPayment(contractId: string, fd: FormData) {
     .from('cost_payments')
     .insert({ ...payload, org_id: orgId })
   if (error) {
-    redirect(`/dashboard/costs/${contractId}?error=${encodeURIComponent(error.message)}`)
+    redirect(`/dashboard/costs/${contractId}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath(`/dashboard/costs/${contractId}`)
   revalidatePath('/dashboard')

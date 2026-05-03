@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { friendlyError } from '@/lib/errors'
 
 async function getOrgId() {
   const supabase = await createClient()
@@ -71,7 +72,7 @@ export async function createProject(fd: FormData) {
     .from('projects')
     .insert({ ...payload, org_id: orgId })
   if (error) {
-    redirect(`/dashboard/projects/new?error=${encodeURIComponent(error.message)}`)
+    redirect(`/dashboard/projects/new?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/projects')
   revalidatePath('/dashboard')
@@ -86,7 +87,7 @@ export async function updateProject(id: string, fd: FormData) {
     .update(payload)
     .eq('id', id)
   if (error) {
-    redirect(`/dashboard/projects/${id}?error=${encodeURIComponent(error.message)}`)
+    redirect(`/dashboard/projects/${id}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/projects')
   revalidatePath('/dashboard')

@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { friendlyError } from '@/lib/errors'
 
 async function getOrgId() {
   const supabase = await createClient()
@@ -56,7 +57,7 @@ export async function createInvoice(fd: FormData) {
   }
   const { error } = await supabase.from('invoices').insert({ ...payload, org_id: orgId })
   if (error) {
-    redirect(`/dashboard/invoices/new?error=${encodeURIComponent(error.message)}`)
+    redirect(`/dashboard/invoices/new?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/invoices')
   revalidatePath('/dashboard')
@@ -68,7 +69,7 @@ export async function updateInvoice(id: string, fd: FormData) {
   const payload = buildPayload(fd)
   const { error } = await supabase.from('invoices').update(payload).eq('id', id)
   if (error) {
-    redirect(`/dashboard/invoices/${id}?error=${encodeURIComponent(error.message)}`)
+    redirect(`/dashboard/invoices/${id}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/invoices')
   revalidatePath('/dashboard')

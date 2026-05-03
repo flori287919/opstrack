@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { friendlyError } from '@/lib/errors'
 
 async function getOrgId() {
   const supabase = await createClient()
@@ -49,7 +50,7 @@ export async function createClientRecord(fd: FormData) {
     notes: str(fd.get('notes')),
   })
   if (error) {
-    redirect(`/dashboard/clients?error=${encodeURIComponent(error.message)}`)
+    redirect(`/dashboard/clients?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/clients')
   redirect('/dashboard/clients')
