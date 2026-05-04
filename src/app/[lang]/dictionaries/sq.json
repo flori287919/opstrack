@@ -65,7 +65,23 @@
     "clients": "Klientët",
     "lookups": "Master Data",
     "audit": "Histori",
-    "settings": "Settings"
+    "settings": "Settings",
+    "admin": "Admin"
+  },
+  "pending": {
+    "badge": "Në pritje aprovimi",
+    "title": "Llogaria juaj është krijuar",
+    "body": "Faleminderit që u regjistruat. Çdo llogari e re duhet të aprovohet manualisht. Do të merrni qasje sapo administratori ta aprovojë (zakonisht brenda 24 orëve). Mund të largoheni dhe të ktheheni më vonë.",
+    "signedInAs": "I kyçur si"
+  },
+  "admin": {
+    "title": "Aprovimet",
+    "subtitle": "Llogaritë e reja në pritje. Aprovo për të dhënë qasje, ose refuzo për të fshirë organizatën.",
+    "orgName": "Organizata",
+    "requestedAt": "Kërkuar më",
+    "approve": "Aprovo",
+    "reject": "Refuzo",
+    "empty": "Asnjë kërkesë në pritje."
   },
   "dashboard": {
     "subtitle": "Pamje e shpejtë e operacioneve sot",

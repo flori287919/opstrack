@@ -65,7 +65,23 @@
     "clients": "Clients",
     "lookups": "Master data",
     "audit": "History",
-    "settings": "Settings"
+    "settings": "Settings",
+    "admin": "Admin"
+  },
+  "pending": {
+    "badge": "Awaiting approval",
+    "title": "Your account has been created",
+    "body": "Thanks for signing up. Every new account requires manual approval. You'll get access as soon as an administrator approves it (usually within 24 hours). You can sign out and come back later.",
+    "signedInAs": "Signed in as"
+  },
+  "admin": {
+    "title": "Approvals",
+    "subtitle": "New accounts pending review. Approve to grant access, or reject to delete the organization.",
+    "orgName": "Organization",
+    "requestedAt": "Requested at",
+    "approve": "Approve",
+    "reject": "Reject",
+    "empty": "No pending requests."
   },
   "dashboard": {
     "subtitle": "Quick view of today's operations",

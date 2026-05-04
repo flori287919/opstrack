@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { logout } from '../login/actions'
 import { getDictionary, hasLocale } from '../dictionaries'
 import { LocaleSwitcher } from './LocaleSwitcher'
+import { isSuperAdmin } from '@/lib/admin'
 
 export default async function DashboardLayout({
   children,
@@ -21,6 +22,17 @@ export default async function DashboardLayout({
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${lang}/login`)
+
+  // Block non-approved users from the dashboard.
+  const { data: member } = await supabase
+    .from('org_members')
+    .select('approved')
+    .eq('user_id', user.id)
+    .limit(1)
+    .maybeSingle()
+  if (!member?.approved) redirect(`/${lang}/pending`)
+
+  const superAdmin = isSuperAdmin(user.email)
 
   const appName = process.env.NEXT_PUBLIC_APP_NAME || t.appName
 
@@ -40,6 +52,7 @@ export default async function DashboardLayout({
     { href: `/${lang}/dashboard/lookups`, label: t.nav.lookups },
     { href: `/${lang}/dashboard/audit`, label: t.nav.audit },
     { href: `/${lang}/dashboard/settings`, label: t.nav.settings },
+    ...(superAdmin ? [{ href: `/${lang}/admin`, label: t.nav.admin }] : []),
   ]
 
   return (
