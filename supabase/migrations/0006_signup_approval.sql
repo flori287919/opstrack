@@ -61,3 +61,43 @@ end $$;
 
 revoke execute on function public.list_pending_signups() from public, anon;
 grant execute on function public.list_pending_signups() to authenticated;
+
+-- ============================================================
+-- approve_signup / reject_signup — bypass RLS so super-admin
+-- can act on memberships in orgs they are not a member of.
+-- ============================================================
+create or replace function public.approve_signup(p_org_id uuid, p_user_id uuid)
+returns void
+language plpgsql security definer set search_path = public, auth
+as $$
+declare
+  v_caller_email text;
+begin
+  select u.email into v_caller_email from auth.users u where u.id = auth.uid();
+  if v_caller_email is null or lower(v_caller_email) <> 'florjan.salaj@gmail.com' then
+    raise exception 'Forbidden';
+  end if;
+  update public.org_members
+    set approved = true
+    where org_id = p_org_id and user_id = p_user_id;
+end $$;
+
+create or replace function public.reject_signup(p_org_id uuid)
+returns void
+language plpgsql security definer set search_path = public, auth
+as $$
+declare
+  v_caller_email text;
+begin
+  select u.email into v_caller_email from auth.users u where u.id = auth.uid();
+  if v_caller_email is null or lower(v_caller_email) <> 'florjan.salaj@gmail.com' then
+    raise exception 'Forbidden';
+  end if;
+  delete from public.organizations where id = p_org_id;
+end $$;
+
+revoke execute on function public.approve_signup(uuid, uuid) from public, anon;
+grant execute on function public.approve_signup(uuid, uuid) to authenticated;
+
+revoke execute on function public.reject_signup(uuid) from public, anon;
+grant execute on function public.reject_signup(uuid) to authenticated;

@@ -58,7 +58,7 @@ export default async function AdminPage({
             ) : (
               (pending ?? []).map((p: { org_id: string; user_id: string; email: string; org_name: string; created_at: string }) => {
                 const approve = approveMembership.bind(null, p.org_id, p.user_id)
-                const reject = rejectMembership.bind(null, p.org_id, p.user_id)
+                const reject = rejectMembership.bind(null, p.org_id)
                 return (
                   <tr key={p.user_id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
                     <td className="px-4 py-3 text-slate-900">{p.email}</td>
