@@ -49,6 +49,8 @@
     "signupTitle": "Regjistrohu",
     "emailLabel": "Email",
     "passwordLabel": "Fjalëkalimi",
+    "passwordConfirmLabel": "Konfirmoni fjalëkalimin",
+    "passwordMismatch": "Fjalëkalimet nuk përputhen",
     "orgNameLabel": "Emri i organizatës",
     "loginButton": "Hyr",
     "signupButton": "Krijo llogari",

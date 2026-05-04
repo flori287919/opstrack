@@ -65,6 +65,18 @@ export default async function SignupPage({
               className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none text-slate-900"
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              {t.auth.passwordConfirmLabel}
+            </label>
+            <input
+              name="password_confirm"
+              type="password"
+              required
+              minLength={8}
+              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none text-slate-900"
+            />
+          </div>
           <button
             type="submit"
             className="w-full bg-slate-900 text-white py-2.5 rounded-lg font-medium hover:bg-slate-800 transition"

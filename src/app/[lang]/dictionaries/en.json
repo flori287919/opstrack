@@ -49,6 +49,8 @@
     "signupTitle": "Sign up",
     "emailLabel": "Email",
     "passwordLabel": "Password",
+    "passwordConfirmLabel": "Confirm password",
+    "passwordMismatch": "Passwords do not match",
     "orgNameLabel": "Organization name",
     "loginButton": "Sign in",
     "signupButton": "Create account",
