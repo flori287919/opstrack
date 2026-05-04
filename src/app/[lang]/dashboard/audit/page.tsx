@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getDictionary, hasLocale } from '../../dictionaries'
+import { parsePagination } from '@/lib/pagination'
+import { Pagination } from '@/components/Pagination'
 
 const ACTION_CLS: Record<string, string> = {
   INSERT: 'bg-emerald-100 text-emerald-700',
@@ -14,24 +16,31 @@ export default async function AuditPage({
   searchParams,
 }: {
   params: Promise<{ lang: string }>
-  searchParams: Promise<{ table?: string; action?: string }>
+  searchParams: Promise<{ table?: string; action?: string; page?: string; pageSize?: string }>
 }) {
   const { lang } = await params
   if (!hasLocale(lang)) notFound()
   const t = await getDictionary(lang)
-  const { table, action } = await searchParams
+  const sp = await searchParams
+  const table = sp.table
+  const action = sp.action
+  const { page, pageSize, from, to } = parsePagination(sp, { pageSize: 50 })
   const supabase = await createClient()
 
   const query = supabase
     .from('audit_log')
-    .select('id, table_name, row_id, action, before, after, created_at, user_id')
+    .select('id, table_name, row_id, action, before, after, created_at, user_id', { count: 'exact' })
     .order('created_at', { ascending: false })
-    .limit(200)
+    .range(from, to)
 
   if (table) query.eq('table_name', table)
   if (action) query.eq('action', action)
 
-  const { data: events, error } = await query
+  const { data: events, error, count } = await query
+  const params2: string[] = []
+  if (action) params2.push(`action=${action}`)
+  if (table) params2.push(`table=${table}`)
+  const baseHref = `/${lang}/dashboard/audit${params2.length ? '?' + params2.join('&') + '&' : '?'}`
 
   const localeTag = lang === 'en' ? 'en-US' : 'sq-AL'
   const actionLabel: Record<string, string> = {
@@ -126,6 +135,14 @@ export default async function AuditPage({
           </tbody>
         </table>
       </div>
+
+      <Pagination
+        page={page}
+        pageSize={pageSize}
+        total={count ?? 0}
+        hrefForPage={(p) => `${baseHref}page=${p}`}
+        labelOf={lang === 'en' ? 'of' : 'nga'}
+      />
     </div>
   )
 }

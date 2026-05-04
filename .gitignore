@@ -36,8 +36,10 @@ yarn-error.log*
 # vercel
 .vercel
 
-# claude code (local config)
-.claude/
+# claude code: shared settings.json is committed; local overrides + state are not
+.claude/settings.local.json
+.claude/cache/
+.claude/state/
 
 # typescript
 *.tsbuildinfo

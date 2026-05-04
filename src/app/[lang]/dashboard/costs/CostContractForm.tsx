@@ -1,3 +1,5 @@
+import { Section, Field, Select } from '@/components/forms'
+
 type CostContractInitial = {
   project_id?: string | null
   beneficiary_name?: string | null
@@ -117,83 +119,3 @@ export function CostContractForm({
   )
 }
 
-function Section({
-  title,
-  children,
-  cols = 2,
-}: {
-  title: string
-  children: React.ReactNode
-  cols?: 1 | 2
-}) {
-  return (
-    <div>
-      <div className="text-xs font-medium uppercase tracking-wide text-slate-500 mb-3">{title}</div>
-      <div className={`grid gap-4 ${cols === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>{children}</div>
-    </div>
-  )
-}
-
-function Field({
-  label,
-  name,
-  type = 'text',
-  defaultValue = '',
-  placeholder,
-  required,
-  step,
-}: {
-  label: string
-  name: string
-  type?: string
-  defaultValue?: string
-  placeholder?: string
-  required?: boolean
-  step?: string
-}) {
-  return (
-    <label className="block">
-      <span className="block text-sm font-medium text-slate-700 mb-1">{label}</span>
-      <input
-        type={type}
-        name={name}
-        defaultValue={defaultValue}
-        placeholder={placeholder}
-        required={required}
-        step={step}
-        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 outline-none focus:ring-2 focus:ring-slate-900"
-      />
-    </label>
-  )
-}
-
-function Select({
-  label,
-  name,
-  options,
-  defaultValue = '',
-  placeholder,
-}: {
-  label: string
-  name: string
-  options: string[]
-  defaultValue?: string
-  placeholder: string
-}) {
-  return (
-    <label className="block">
-      <span className="block text-sm font-medium text-slate-700 mb-1">{label}</span>
-      <select
-        name={name}
-        defaultValue={defaultValue}
-        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 outline-none focus:ring-2 focus:ring-slate-900 bg-white"
-      >
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o || placeholder}
-          </option>
-        ))}
-      </select>
-    </label>
-  )
-}

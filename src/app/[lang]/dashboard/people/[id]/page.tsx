@@ -5,6 +5,7 @@ import { formatEUR, formatDate, todayISO } from '@/lib/format'
 import { updatePerson, softDeletePerson } from '../actions'
 import { activeAllocationPctForPerson, type Allocation } from '@/lib/people-cost'
 import { getDictionary, hasLocale } from '../../../dictionaries'
+import { Field, Select } from '@/components/forms'
 
 export default async function PersonDetailPage({
   params,
@@ -178,61 +179,3 @@ export default async function PersonDetailPage({
   )
 }
 
-function Field({
-  label,
-  name,
-  type = 'text',
-  defaultValue = '',
-  required,
-  step,
-}: {
-  label: string
-  name: string
-  type?: string
-  defaultValue?: string
-  required?: boolean
-  step?: string
-}) {
-  return (
-    <label className="block">
-      <span className="block text-sm font-medium text-slate-700 mb-1">{label}</span>
-      <input
-        type={type}
-        name={name}
-        defaultValue={defaultValue}
-        required={required}
-        step={step}
-        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 outline-none focus:ring-2 focus:ring-slate-900"
-      />
-    </label>
-  )
-}
-
-function Select({
-  label,
-  name,
-  options,
-  defaultValue,
-}: {
-  label: string
-  name: string
-  options: string[]
-  defaultValue?: string
-}) {
-  return (
-    <label className="block">
-      <span className="block text-sm font-medium text-slate-700 mb-1">{label}</span>
-      <select
-        name={name}
-        defaultValue={defaultValue}
-        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 outline-none focus:ring-2 focus:ring-slate-900 bg-white"
-      >
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
-      </select>
-    </label>
-  )
-}

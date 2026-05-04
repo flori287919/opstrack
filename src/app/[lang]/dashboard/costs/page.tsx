@@ -4,27 +4,32 @@ import { createClient } from '@/lib/supabase/server'
 import { formatEUR } from '@/lib/format'
 import { restoreCostContract } from './actions'
 import { getDictionary, hasLocale } from '../../dictionaries'
+import { parsePagination } from '@/lib/pagination'
+import { Pagination } from '@/components/Pagination'
 
 export default async function CostsPage({
   params,
   searchParams,
 }: {
   params: Promise<{ lang: string }>
-  searchParams: Promise<{ show?: string }>
+  searchParams: Promise<{ show?: string; page?: string; pageSize?: string }>
 }) {
   const { lang } = await params
   if (!hasLocale(lang)) notFound()
   const t = await getDictionary(lang)
-  const { show } = await searchParams
-  const showDeleted = show === 'deleted'
+  const sp = await searchParams
+  const showDeleted = sp.show === 'deleted'
+  const { page, pageSize, from, to } = parsePagination(sp)
   const supabase = await createClient()
 
   const query = supabase
     .from('cost_contracts')
     .select(
-      'id, contract_name, beneficiary_name, status, contract_value_no_taxes, contract_value_with_taxes, deleted_at, project:projects(id, project_code, name)'
+      'id, contract_name, beneficiary_name, status, contract_value_no_taxes, contract_value_with_taxes, deleted_at, project:projects(id, project_code, name)',
+      { count: 'exact' }
     )
     .order('created_at', { ascending: false })
+    .range(from, to)
 
   if (showDeleted) {
     query.not('deleted_at', 'is', null)
@@ -32,7 +37,8 @@ export default async function CostsPage({
     query.is('deleted_at', null)
   }
 
-  const { data: contracts, error } = await query
+  const { data: contracts, error, count } = await query
+  const baseHref = `/${lang}/dashboard/costs${showDeleted ? '?show=deleted&' : '?'}`
 
   return (
     <div className="p-8 max-w-7xl">
@@ -111,6 +117,14 @@ export default async function CostsPage({
           </tbody>
         </table>
       </div>
+
+      <Pagination
+        page={page}
+        pageSize={pageSize}
+        total={count ?? 0}
+        hrefForPage={(p) => `${baseHref}page=${p}`}
+        labelOf={lang === 'en' ? 'of' : 'nga'}
+      />
     </div>
   )
 }

@@ -6,6 +6,7 @@ import {
   createPM, deletePM,
 } from './actions'
 import { getDictionary, hasLocale } from '../../dictionaries'
+import { Field, Select } from '@/components/forms'
 
 export default async function LookupsPage({
   params,
@@ -53,9 +54,9 @@ export default async function LookupsPage({
           deleteLabel={t.common.delete}
           form={
             <form action={createBL} className="space-y-2">
-              <Field label={`${t.lookups.code} *`} name="code" placeholder="IN" required />
-              <Field label={`${t.common.name} *`} name="name" placeholder="Innovation" required />
-              <Field label={t.lookups.description} name="description" />
+              <Field size="sm" label={`${t.lookups.code} *`} name="code" placeholder="IN" required />
+              <Field size="sm" label={`${t.common.name} *`} name="name" placeholder="Innovation" required />
+              <Field size="sm" label={t.lookups.description} name="description" />
               <Submit label={t.lookups.addNew} />
             </form>
           }
@@ -75,9 +76,9 @@ export default async function LookupsPage({
           deleteLabel={t.common.delete}
           form={
             <form action={createBeneficiary} className="space-y-2">
-              <Field label={`${t.common.name} *`} name="name" required />
-              <Select label={t.common.country} name="country" options={countryOptions} placeholder={t.common.select} />
-              <Field label={t.common.notes} name="notes" />
+              <Field size="sm" label={`${t.common.name} *`} name="name" required />
+              <Select size="sm" label={t.common.country} name="country" options={countryOptions} placeholder={t.common.select} />
+              <Field size="sm" label={t.common.notes} name="notes" />
               <Submit label={t.lookups.addNew} />
             </form>
           }
@@ -97,9 +98,9 @@ export default async function LookupsPage({
           deleteLabel={t.common.delete}
           form={
             <form action={createPM} className="space-y-2">
-              <Field label={`${t.common.name} *`} name="name" required />
-              <Field label={t.common.email} name="email" type="email" />
-              <Select label={t.common.role} name="role" options={['', 'Senior PM', 'PM', 'Junior PM', 'Other']} placeholder={t.common.select} />
+              <Field size="sm" label={`${t.common.name} *`} name="name" required />
+              <Field size="sm" label={t.common.email} name="email" type="email" />
+              <Select size="sm" label={t.common.role} name="role" options={['', 'Senior PM', 'PM', 'Junior PM', 'Other']} placeholder={t.common.select} />
               <Submit label={t.lookups.addNew} />
             </form>
           }
@@ -151,42 +152,6 @@ function Section<T extends { id: string }>({
         </div>
       </div>
     </div>
-  )
-}
-
-function Field({
-  label, name, type = 'text', placeholder, required,
-}: {
-  label: string
-  name: string
-  type?: string
-  placeholder?: string
-  required?: boolean
-}) {
-  return (
-    <label className="block">
-      <span className="block text-xs font-medium text-slate-600 mb-1">{label}</span>
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        required={required}
-        className="w-full px-3 py-1.5 text-sm border border-slate-300 rounded text-slate-900 outline-none focus:ring-2 focus:ring-slate-900"
-      />
-    </label>
-  )
-}
-
-function Select({ label, name, options, placeholder }: { label: string; name: string; options: string[]; placeholder: string }) {
-  return (
-    <label className="block">
-      <span className="block text-xs font-medium text-slate-600 mb-1">{label}</span>
-      <select name={name} className="w-full px-3 py-1.5 text-sm border border-slate-300 rounded text-slate-900 bg-white outline-none focus:ring-2 focus:ring-slate-900">
-        {options.map((o) => (
-          <option key={o} value={o}>{o || placeholder}</option>
-        ))}
-      </select>
-    </label>
   )
 }
 

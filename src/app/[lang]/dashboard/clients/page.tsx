@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createClientRecord, softDeleteClient } from './actions'
 import { getDictionary, hasLocale } from '../../dictionaries'
+import { Field, Select } from '@/components/forms'
 
 export default async function ClientsPage({
   params,
@@ -42,13 +43,13 @@ export default async function ClientsPage({
           <div className="bg-white border border-slate-200 rounded-xl p-5">
             <h2 className="font-medium text-slate-900 mb-4">{t.clients.addClient}</h2>
             <form action={createClientRecord} className="space-y-3">
-              <Field label={`${t.common.name} *`} name="name" required />
-              <Select label={t.common.country} name="country" options={countryOptions} placeholder={placeholder} />
-              <Field label={t.clients.contactPerson} name="contact_person" />
-              <Field label={t.common.email} name="email" type="email" />
-              <Field label={t.common.phone} name="phone" />
-              <Field label={t.clients.paymentTermsDays} name="payment_terms_days" type="number" />
-              <Select label={t.clients.defaultModality} name="default_modality" options={['', 'Contract', 'PO']} placeholder={placeholder} />
+              <Field size="md" label={`${t.common.name} *`} name="name" required />
+              <Select size="md" label={t.common.country} name="country" options={countryOptions} placeholder={placeholder} />
+              <Field size="md" label={t.clients.contactPerson} name="contact_person" />
+              <Field size="md" label={t.common.email} name="email" type="email" />
+              <Field size="md" label={t.common.phone} name="phone" />
+              <Field size="md" label={t.clients.paymentTermsDays} name="payment_terms_days" type="number" />
+              <Select size="md" label={t.clients.defaultModality} name="default_modality" options={['', 'Contract', 'PO']} placeholder={placeholder} />
               <button type="submit" className="w-full px-4 py-2 text-sm font-medium bg-slate-900 text-white rounded-lg hover:bg-slate-800">
                 {t.common.save}
               </button>
@@ -104,54 +105,3 @@ export default async function ClientsPage({
   )
 }
 
-function Field({
-  label,
-  name,
-  type = 'text',
-  required,
-}: {
-  label: string
-  name: string
-  type?: string
-  required?: boolean
-}) {
-  return (
-    <label className="block">
-      <span className="block text-xs font-medium text-slate-600 mb-1">{label}</span>
-      <input
-        type={type}
-        name={name}
-        required={required}
-        className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg text-slate-900 outline-none focus:ring-2 focus:ring-slate-900"
-      />
-    </label>
-  )
-}
-
-function Select({
-  label,
-  name,
-  options,
-  placeholder,
-}: {
-  label: string
-  name: string
-  options: string[]
-  placeholder: string
-}) {
-  return (
-    <label className="block">
-      <span className="block text-xs font-medium text-slate-600 mb-1">{label}</span>
-      <select
-        name={name}
-        className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg text-slate-900 bg-white outline-none focus:ring-2 focus:ring-slate-900"
-      >
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o || placeholder}
-          </option>
-        ))}
-      </select>
-    </label>
-  )
-}

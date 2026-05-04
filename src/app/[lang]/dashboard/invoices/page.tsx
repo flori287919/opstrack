@@ -4,27 +4,33 @@ import { createClient } from '@/lib/supabase/server'
 import { formatEUR, formatDate, todayISO } from '@/lib/format'
 import { restoreInvoice } from './actions'
 import { getDictionary, hasLocale } from '../../dictionaries'
+import { parsePagination } from '@/lib/pagination'
+import { Pagination } from '@/components/Pagination'
 
 export default async function InvoicesPage({
   params,
   searchParams,
 }: {
   params: Promise<{ lang: string }>
-  searchParams: Promise<{ show?: string; filter?: string }>
+  searchParams: Promise<{ show?: string; filter?: string; page?: string; pageSize?: string }>
 }) {
   const { lang } = await params
   if (!hasLocale(lang)) notFound()
   const t = await getDictionary(lang)
-  const { show, filter } = await searchParams
-  const showDeleted = show === 'deleted'
+  const sp = await searchParams
+  const showDeleted = sp.show === 'deleted'
+  const filter = sp.filter
+  const { page, pageSize, from, to } = parsePagination(sp)
   const supabase = await createClient()
 
   const query = supabase
     .from('invoices')
     .select(
-      'id, invoice_number, amount_no_vat, status, planned_collection_date, collection_date, actual_issue_date, project:projects(id, project_code, name)'
+      'id, invoice_number, amount_no_vat, status, planned_collection_date, collection_date, actual_issue_date, project:projects(id, project_code, name)',
+      { count: 'exact' }
     )
     .order('planned_collection_date', { ascending: false, nullsFirst: false })
+    .range(from, to)
 
   if (showDeleted) {
     query.not('deleted_at', 'is', null)
@@ -41,7 +47,11 @@ export default async function InvoicesPage({
     query.in('status', ['Scheduled', 'Invoiced'])
   }
 
-  const { data: invoices, error } = await query
+  const { data: invoices, error, count } = await query
+  const params2: string[] = []
+  if (showDeleted) params2.push('show=deleted')
+  if (filter) params2.push(`filter=${filter}`)
+  const baseHref = `/${lang}/dashboard/invoices${params2.length ? '?' + params2.join('&') + '&' : '?'}`
 
   return (
     <div className="p-8 max-w-7xl">
@@ -138,6 +148,14 @@ export default async function InvoicesPage({
           </tbody>
         </table>
       </div>
+
+      <Pagination
+        page={page}
+        pageSize={pageSize}
+        total={count ?? 0}
+        hrefForPage={(p) => `${baseHref}page=${p}`}
+        labelOf={lang === 'en' ? 'of' : 'nga'}
+      />
     </div>
   )
 }

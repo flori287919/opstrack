@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { formatEUR } from '@/lib/format'
 import { createPerson, softDeletePerson } from './actions'
 import { getDictionary, hasLocale } from '../../dictionaries'
+import { Field as SharedField, Select as SharedSelect } from '@/components/forms'
 
 export default async function PeoplePage({
   params,
@@ -135,61 +136,10 @@ export default async function PeoplePage({
   )
 }
 
-function Field({
-  label,
-  name,
-  type = 'text',
-  required,
-  step,
-  placeholder,
-}: {
-  label: string
-  name: string
-  type?: string
-  required?: boolean
-  step?: string
-  placeholder?: string
-}) {
-  return (
-    <label className="block">
-      <span className="block text-xs font-medium text-slate-600 mb-1">{label}</span>
-      <input
-        type={type}
-        name={name}
-        required={required}
-        step={step}
-        placeholder={placeholder}
-        className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg text-slate-900 outline-none focus:ring-2 focus:ring-slate-900"
-      />
-    </label>
-  )
+function Field(props: React.ComponentProps<typeof SharedField>) {
+  return <SharedField size="md" {...props} />
 }
 
-function Select({
-  label,
-  name,
-  options,
-  defaultValue,
-}: {
-  label: string
-  name: string
-  options: string[]
-  defaultValue?: string
-}) {
-  return (
-    <label className="block">
-      <span className="block text-xs font-medium text-slate-600 mb-1">{label}</span>
-      <select
-        name={name}
-        defaultValue={defaultValue}
-        className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg text-slate-900 bg-white outline-none focus:ring-2 focus:ring-slate-900"
-      >
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
-      </select>
-    </label>
-  )
+function Select(props: Omit<React.ComponentProps<typeof SharedSelect>, 'size'>) {
+  return <SharedSelect size="md" placeholder="" {...props} />
 }
