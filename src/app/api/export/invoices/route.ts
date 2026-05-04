@@ -12,7 +12,7 @@ export async function GET() {
   const { data: invoices } = await supabase
     .from('invoices')
     .select(
-      'invoice_number, deliverable_number, planned_issue_date, actual_issue_date, planned_collection_date, expected_collection_date, collection_date, amount_no_vat, vat_rate, status, notes, project:projects(project_code, name, client:clients(name))'
+      'invoice_number, planned_issue_date, actual_issue_date, planned_collection_date, expected_collection_date, collection_date, amount_no_vat, vat_rate, status, notes, project:projects(project_code, name, client:clients(name)), deliverable:deliverables(code, name)'
     )
     .is('deleted_at', null)
     .order('actual_issue_date', { ascending: false, nullsFirst: false })
@@ -25,7 +25,7 @@ export async function GET() {
     { header: 'Project Code', key: 'project_code', width: 14 },
     { header: 'Project', key: 'project_name', width: 30 },
     { header: 'Klient', key: 'client', width: 24 },
-    { header: 'Deliverable #', key: 'deliverable_number', width: 14 },
+    { header: 'Deliverable', key: 'deliverable', width: 24 },
     { header: 'Planned Issue', key: 'planned_issue_date', width: 14 },
     { header: 'Actual Issue', key: 'actual_issue_date', width: 14 },
     { header: 'Planned Collection', key: 'planned_collection_date', width: 16 },
@@ -39,11 +39,13 @@ export async function GET() {
   for (const inv of invoices ?? []) {
     const project = Array.isArray(inv.project) ? inv.project[0] : inv.project
     const client = project ? (Array.isArray(project.client) ? project.client[0] : project.client) : null
+    const deliverable = Array.isArray(inv.deliverable) ? inv.deliverable[0] : inv.deliverable
     ws.addRow({
       ...inv,
       project_code: project?.project_code ?? '',
       project_name: project?.name ?? '',
       client: client?.name ?? '',
+      deliverable: deliverable ? `${deliverable.code} — ${deliverable.name}` : '',
     })
   }
 

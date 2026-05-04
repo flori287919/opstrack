@@ -1,6 +1,24 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const LOCALES = ['sq', 'en'] as const
+const DEFAULT_LOCALE = 'sq'
+
+function localeFromPath(pathname: string): string {
+  for (const l of LOCALES) {
+    if (pathname === `/${l}` || pathname.startsWith(`/${l}/`)) return l
+  }
+  return DEFAULT_LOCALE
+}
+
+function stripLocale(pathname: string): string {
+  for (const l of LOCALES) {
+    if (pathname === `/${l}`) return '/'
+    if (pathname.startsWith(`/${l}/`)) return pathname.slice(l.length + 1)
+  }
+  return pathname
+}
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
@@ -30,16 +48,18 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   const url = request.nextUrl.clone()
-  const isAuthPage = url.pathname.startsWith('/login') || url.pathname.startsWith('/signup')
-  const isPublic = url.pathname === '/' || isAuthPage
+  const locale = localeFromPath(url.pathname)
+  const stripped = stripLocale(url.pathname)
+  const isAuthPage = stripped.startsWith('/login') || stripped.startsWith('/signup')
+  const isPublic = stripped === '/' || isAuthPage
 
   if (!user && !isPublic) {
-    url.pathname = '/login'
+    url.pathname = `/${locale}/login`
     return NextResponse.redirect(url)
   }
 
   if (user && isAuthPage) {
-    url.pathname = '/dashboard'
+    url.pathname = `/${locale}/dashboard`
     return NextResponse.redirect(url)
   }
 
