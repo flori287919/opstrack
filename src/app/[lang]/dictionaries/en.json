@@ -1,5 +1,5 @@
 {
-  "appName": "Operations1",
+  "appName": "Operations Management Application",
   "common": {
     "save": "Save",
     "saveChanges": "Save changes",
@@ -34,7 +34,7 @@
   "landing": {
     "signIn": "Sign in",
     "signUp": "Sign up",
-    "heroTitle": "Business operations, without the Excel chaos.",
+    "heroTitle": "Business Operations Manager Tool",
     "heroSubtitle": "Track projects, invoices, costs, and collections in one place. Full change history. No data lost.",
     "ctaSignup": "Start free",
     "feature1Title": "Invoicing & collection",

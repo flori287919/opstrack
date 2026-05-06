@@ -1,5 +1,5 @@
 {
-  "appName": "Operations1",
+  "appName": "Operations Management Application",
   "common": {
     "save": "Ruaj",
     "saveChanges": "Ruaj ndryshimet",
@@ -34,7 +34,7 @@
   "landing": {
     "signIn": "Hyr",
     "signUp": "Regjistrohu",
-    "heroTitle": "Operacionet e biznesit, pa kaosin e Excel-it.",
+    "heroTitle": "Business Operations Manager Tool",
     "heroSubtitle": "Ndiq projekte, fatura, kosto, dhe arkëtime në një vend. Histori e plotë e ndryshimeve. Pa të dhëna që humbasin.",
     "ctaSignup": "Fillo falas",
     "feature1Title": "Faturat dhe arkëtimi",

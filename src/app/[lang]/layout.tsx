@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Operations1 — Operations management',
+  title: 'Operations Management Application',
   description: 'Track projects, invoices, costs and collection in one place.',
 }
 
