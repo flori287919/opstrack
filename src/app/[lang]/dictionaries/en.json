@@ -123,7 +123,12 @@
     "topClientsTotalAmount": "Total",
     "topClientsDaysLate": "days late",
     "topClientsDaysEarly": "days early",
-    "topClientsAvgDelta": "Avg delta (days)"
+    "topClientsAvgDelta": "Avg delta (days)",
+    "emptyTitle": "Empty workspace — try sample data",
+    "emptyBody": "No projects yet. Click below to fill the dashboard with realistic sample data (5 clients, 8 projects, 25 invoices, etc.) so you can see how the charts and KPIs work. You can clear it any time from Settings.",
+    "emptyLoadButton": "Load sample data",
+    "emptyLoading": "Loading...",
+    "emptySuccess": "Done"
   },
   "projects": {
     "title": "Projects",
@@ -416,6 +421,12 @@
     "version": "Version",
     "dataExport": "Data export",
     "dataExportDesc": "Download all your organization's data as JSON. Includes clients, projects, invoices, costs, people, and the audit log.",
-    "dataExportButton": "Download data (JSON)"
+    "dataExportButton": "Download data (JSON)",
+    "sampleDataTitle": "Sample data",
+    "sampleDataDesc": "Populate the workspace with realistic sample data (clients, projects, invoices, costs, staff) to see how the dashboard and charts work. Everything is tagged '[DEMO]' and can be removed with one click.",
+    "sampleDataLoad": "Load sample data",
+    "sampleDataClear": "Clear sample data",
+    "sampleDataLoading": "Processing...",
+    "sampleDataConfirmClear": "Are you sure you want to delete all sample data (tagged [DEMO])? Your real data will not be touched."
   }
 }

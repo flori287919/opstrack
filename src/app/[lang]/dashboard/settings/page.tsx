@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getDictionary, hasLocale } from '../../dictionaries'
+import { hasSampleData } from './actions'
+import { SampleDataActions } from './SampleDataActions'
 
 export default async function SettingsPage({
   params,
@@ -17,6 +19,7 @@ export default async function SettingsPage({
   const { data: orgs } = await supabase.from('organizations').select('*').limit(1)
   const org = orgs?.[0]
   const localeTag = lang === 'en' ? 'en-US' : 'sq-AL'
+  const sampleLoaded = await hasSampleData()
 
   return (
     <div className="p-8 max-w-3xl">
@@ -51,6 +54,19 @@ export default async function SettingsPage({
           >
             {t.settings.dataExportButton}
           </a>
+        </Card>
+
+        <Card title={t.settings.sampleDataTitle}>
+          <p className="text-sm text-slate-600 mb-3">{t.settings.sampleDataDesc}</p>
+          <SampleDataActions
+            initialHasSample={sampleLoaded}
+            labels={{
+              loadButton: t.settings.sampleDataLoad,
+              clearButton: t.settings.sampleDataClear,
+              loading: t.settings.sampleDataLoading,
+              confirmClear: t.settings.sampleDataConfirmClear,
+            }}
+          />
         </Card>
       </div>
     </div>

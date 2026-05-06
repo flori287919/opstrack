@@ -123,7 +123,12 @@
     "topClientsTotalAmount": "Totali",
     "topClientsDaysLate": "ditë vonesë",
     "topClientsDaysEarly": "ditë para",
-    "topClientsAvgDelta": "Delta mesatare (ditë)"
+    "topClientsAvgDelta": "Delta mesatare (ditë)",
+    "emptyTitle": "Workspace bosh — provoje me të dhëna shembull",
+    "emptyBody": "Asnjë projekt akoma. Klik butonin më poshtë për të mbushur dashboard-in me të dhëna shembull (5 klientë, 8 projekte, 25 fatura, etj.) që të shohësh si funksionojnë grafikët dhe KPI-të. Mund t'i fshish në çdo moment nga Settings.",
+    "emptyLoadButton": "Ngarko të dhëna shembull",
+    "emptyLoading": "Po ngarkohet...",
+    "emptySuccess": "Sukses"
   },
   "projects": {
     "title": "Projektet",
@@ -416,6 +421,12 @@
     "version": "Versioni",
     "dataExport": "Eksportim i të dhënave",
     "dataExportDesc": "Shkarko të gjitha të dhënat e organizatës tënde si JSON. Përfshin klientët, projektet, faturat, kostot, njerëzit dhe audit log-un.",
-    "dataExportButton": "Shkarko të dhënat (JSON)"
+    "dataExportButton": "Shkarko të dhënat (JSON)",
+    "sampleDataTitle": "Të dhëna shembull",
+    "sampleDataDesc": "Mbush workspace-in me të dhëna realiste shembull (klientë, projekte, fatura, kosto, staf) për të parë sesi funksionojnë dashboard-i dhe grafikët. Të gjitha shënohen me '[DEMO]' dhe mund të fshihen me një klik.",
+    "sampleDataLoad": "Ngarko të dhëna shembull",
+    "sampleDataClear": "Fshi të dhënat shembull",
+    "sampleDataLoading": "Po procesohet...",
+    "sampleDataConfirmClear": "Sigurt që do të fshihen të gjitha të dhënat shembull (të shënuara me [DEMO])? Të dhënat e tua reale nuk preken."
   }
 }
