@@ -50,6 +50,7 @@ export default async function DashboardLayout({
     { href: `/${lang}/dashboard/people`, label: t.nav.people },
     { href: `/${lang}/dashboard/clients`, label: t.nav.clients },
     { href: `/${lang}/dashboard/lookups`, label: t.nav.lookups },
+    { href: `/${lang}/dashboard/import`, label: t.nav.import },
     { href: `/${lang}/dashboard/audit`, label: t.nav.audit },
     { href: `/${lang}/dashboard/settings`, label: t.nav.settings },
     ...(superAdmin ? [{ href: `/${lang}/admin`, label: t.nav.admin }] : []),
