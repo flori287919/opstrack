@@ -114,7 +114,15 @@
     "noAlarms": "No active alarms — all invoices within term.",
     "overdueMessage": "{count} unpaid invoices have passed their collection date. Open \"Invoices\" for the full list.",
     "cashFlow30": "Cash flow next 30 days",
-    "invoicingVsCollection": "Invoicing vs Collection — 12 months"
+    "invoicingVsCollection": "Invoicing vs Collection — 12 months",
+    "topClientsTitle": "Top 10 clients — Collection Delta",
+    "topClientsSubtitle": "Average days from planned collection date to actual collection (last 12 months). Red = pays late, green = pays early.",
+    "topClientsEmpty": "No data yet. Once you collect invoices with Collection Date and Planned Collection Date, clients will appear here.",
+    "topClientsInvoicesCount": "Invoices",
+    "topClientsTotalAmount": "Total",
+    "topClientsDaysLate": "days late",
+    "topClientsDaysEarly": "days early",
+    "topClientsAvgDelta": "Avg delta (days)"
   },
   "projects": {
     "title": "Projects",

@@ -11,6 +11,7 @@ import {
   Legend,
   CartesianGrid,
   BarChart,
+  Cell,
 } from 'recharts'
 
 export type CashFlowPoint = {
@@ -23,6 +24,13 @@ export type MonthlyPoint = {
   month: string
   invoiced: number
   collected: number
+}
+
+export type ClientDeltaPoint = {
+  client: string
+  avgDelta: number
+  invoices: number
+  totalAmount: number
 }
 
 const formatEUR = (n: number) =>
@@ -72,6 +80,68 @@ export function InvoicingVsCollectionChart({ data }: { data: MonthlyPoint[] }) {
         <Legend wrapperStyle={{ fontSize: 12 }} />
         <Bar dataKey="invoiced" name="Faturuar" fill="#0f172a" radius={[4, 4, 0, 0]} />
         <Bar dataKey="collected" name="Arkëtuar" fill="#10b981" radius={[4, 4, 0, 0]} />
+      </BarChart>
+    </ResponsiveContainer>
+  )
+}
+
+type TopClientsLabels = {
+  empty: string
+  invoicesCount: string
+  totalAmount: string
+  daysLate: string
+  daysEarly: string
+  avgDelta: string
+}
+
+export function TopClientsChart({
+  data,
+  labels,
+}: {
+  data: ClientDeltaPoint[]
+  labels: TopClientsLabels
+}) {
+  if (data.length === 0) {
+    return <p className="text-sm text-slate-500">{labels.empty}</p>
+  }
+
+  const height = Math.max(220, data.length * 32 + 40)
+  const maxAbs = Math.max(...data.map((d) => Math.abs(d.avgDelta)), 1)
+
+  return (
+    <ResponsiveContainer width="100%" height={height}>
+      <BarChart data={data} layout="vertical" margin={{ top: 4, right: 24, left: 8, bottom: 4 }}>
+        <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" horizontal={false} />
+        <XAxis
+          type="number"
+          domain={[-maxAbs, maxAbs]}
+          tick={{ fontSize: 11, fill: '#64748b' }}
+          tickFormatter={(v) => `${v > 0 ? '+' : ''}${v}`}
+        />
+        <YAxis
+          type="category"
+          dataKey="client"
+          width={140}
+          tick={{ fontSize: 11, fill: '#0f172a' }}
+        />
+        <Tooltip
+          contentStyle={{ fontSize: 12 }}
+          formatter={(value, _name, item) => {
+            const v = Number(value ?? 0)
+            const sign = v > 0 ? labels.daysLate : v < 0 ? labels.daysEarly : ''
+            const payload = (item as { payload?: ClientDeltaPoint }).payload
+            return [
+              `${v > 0 ? '+' : ''}${v} ${sign}`,
+              `${labels.invoicesCount}: ${payload?.invoices ?? 0} · ${labels.totalAmount}: ${formatEUR(payload?.totalAmount ?? 0)}`,
+            ]
+          }}
+          labelFormatter={(label) => String(label)}
+        />
+        <Bar dataKey="avgDelta" name={labels.avgDelta} radius={[0, 4, 4, 0]}>
+          {data.map((d, i) => (
+            <Cell key={i} fill={d.avgDelta > 0 ? '#dc2626' : d.avgDelta < 0 ? '#10b981' : '#94a3b8'} />
+          ))}
+        </Bar>
       </BarChart>
     </ResponsiveContainer>
   )

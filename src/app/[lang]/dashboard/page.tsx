@@ -1,6 +1,13 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { CashFlowChart, InvoicingVsCollectionChart, CashFlowPoint, MonthlyPoint } from './Charts'
+import {
+  CashFlowChart,
+  InvoicingVsCollectionChart,
+  TopClientsChart,
+  CashFlowPoint,
+  MonthlyPoint,
+  ClientDeltaPoint,
+} from './Charts'
 import { computeProjectPeopleCost, type Person, type Allocation, type Timesheet } from '@/lib/people-cost'
 import { getDictionary, hasLocale } from '../dictionaries'
 
@@ -75,6 +82,7 @@ export default async function DashboardHome({
     peopleRes,
     monthAllocationsRes,
     monthTimesheetsRes,
+    topClientsRes,
   ] = await Promise.all([
     supabase
       .from('invoices')
@@ -139,6 +147,15 @@ export default async function DashboardHome({
       .is('deleted_at', null)
       .gte('date', monthStartISO)
       .lte('date', monthEndISO),
+    supabase
+      .from('invoices')
+      .select(
+        'amount_no_vat, planned_collection_date, collection_date, project:projects(client:clients(id, name))'
+      )
+      .is('deleted_at', null)
+      .not('collection_date', 'is', null)
+      .not('planned_collection_date', 'is', null)
+      .gte('collection_date', start12mo),
   ])
 
   const overdueAmount = (overdueRes.data ?? []).reduce(
@@ -227,6 +244,32 @@ export default async function DashboardHome({
     hours: Number(t.hours),
   }))
 
+  // Top 10 clients by Collection Delta — paid invoices in last 12 months
+  type ClientAgg = { name: string; deltaSum: number; count: number; total: number }
+  const clientAgg: Record<string, ClientAgg> = {}
+  for (const inv of topClientsRes.data ?? []) {
+    const project = Array.isArray(inv.project) ? inv.project[0] : inv.project
+    const client = project ? (Array.isArray(project.client) ? project.client[0] : project.client) : null
+    if (!client?.id || !client.name) continue
+    if (!inv.collection_date || !inv.planned_collection_date) continue
+    const planned = new Date(inv.planned_collection_date)
+    const actual = new Date(inv.collection_date)
+    const delta = Math.round((actual.getTime() - planned.getTime()) / 86_400_000)
+    const entry = clientAgg[client.id] ?? (clientAgg[client.id] = { name: client.name, deltaSum: 0, count: 0, total: 0 })
+    entry.deltaSum += delta
+    entry.count += 1
+    entry.total += Number(inv.amount_no_vat || 0)
+  }
+  const topClientsData: ClientDeltaPoint[] = Object.values(clientAgg)
+    .map((c) => ({
+      client: c.name,
+      avgDelta: Math.round(c.deltaSum / c.count),
+      invoices: c.count,
+      totalAmount: c.total,
+    }))
+    .sort((a, b) => b.avgDelta - a.avgDelta)
+    .slice(0, 10)
+
   const projectIds = Array.from(new Set(allocList.map((a) => a.project_id)))
   let monthPeopleCost = 0
   for (const pid of projectIds) {
@@ -308,7 +351,7 @@ export default async function DashboardHome({
         </div>
       </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <div className="bg-white border border-slate-200 rounded-xl p-6">
           <h3 className="font-medium text-slate-900 mb-4">{t.dashboard.cashFlow30}</h3>
           <CashFlowChart data={cashFlowData} />
@@ -317,6 +360,22 @@ export default async function DashboardHome({
           <h3 className="font-medium text-slate-900 mb-4">{t.dashboard.invoicingVsCollection}</h3>
           <InvoicingVsCollectionChart data={monthlyData} />
         </div>
+      </section>
+
+      <section className="bg-white border border-slate-200 rounded-xl p-6">
+        <h3 className="font-medium text-slate-900 mb-1">{t.dashboard.topClientsTitle}</h3>
+        <p className="text-xs text-slate-500 mb-4">{t.dashboard.topClientsSubtitle}</p>
+        <TopClientsChart
+          data={topClientsData}
+          labels={{
+            empty: t.dashboard.topClientsEmpty,
+            invoicesCount: t.dashboard.topClientsInvoicesCount,
+            totalAmount: t.dashboard.topClientsTotalAmount,
+            daysLate: t.dashboard.topClientsDaysLate,
+            daysEarly: t.dashboard.topClientsDaysEarly,
+            avgDelta: t.dashboard.topClientsAvgDelta,
+          }}
+        />
       </section>
     </div>
   )
