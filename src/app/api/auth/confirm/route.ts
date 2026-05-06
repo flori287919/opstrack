@@ -9,7 +9,16 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const token_hash = searchParams.get('token_hash')
   const type = searchParams.get('type') as EmailOtpType | null
-  const next = searchParams.get('next') ?? '/sq'
+  const rawNext = searchParams.get('next') ?? '/sq'
+  // Reject anything that isn't a same-origin relative path. `new URL(absolute, base)`
+  // resolves to `absolute` when `absolute` is itself a full URL — so an unvalidated
+  // `?next=https://evil.com` produces a cross-origin 302 (open redirect + session
+  // fixation, since verifyOtp also sets the attacker's session cookies on the
+  // victim's browser). Block protocol-relative (`//`) and Windows backslash escapes.
+  const next =
+    rawNext.startsWith('/') && !rawNext.startsWith('//') && !rawNext.startsWith('/\\')
+      ? rawNext
+      : '/sq'
 
   if (token_hash && type) {
     const supabase = await createClient()
