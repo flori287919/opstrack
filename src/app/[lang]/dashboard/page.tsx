@@ -10,6 +10,8 @@ import {
 } from './Charts'
 import { computeProjectPeopleCost, type Person, type Allocation, type Timesheet } from '@/lib/people-cost'
 import { getDictionary, hasLocale } from '../dictionaries'
+import { isWorkspaceEmpty } from './settings/actions'
+import { EmptyStateBanner } from './EmptyStateBanner'
 
 type KPI = {
   label: string
@@ -56,6 +58,8 @@ export default async function DashboardHome({
   if (!hasLocale(lang)) notFound()
   const t = await getDictionary(lang)
   const supabase = await createClient()
+
+  const workspaceEmpty = await isWorkspaceEmpty()
 
   const today = new Date()
   const startOfWeek = new Date(today)
@@ -333,6 +337,16 @@ export default async function DashboardHome({
           {t.dashboard.subtitle} — {today.toLocaleDateString(localeTag)}
         </p>
       </div>
+
+      {workspaceEmpty && (
+        <EmptyStateBanner
+          title={t.dashboard.emptyTitle}
+          body={t.dashboard.emptyBody}
+          loadButton={t.dashboard.emptyLoadButton}
+          loading={t.dashboard.emptyLoading}
+          successPrefix={t.dashboard.emptySuccess}
+        />
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
         {kpis.map((k) => (
