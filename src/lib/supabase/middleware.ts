@@ -51,7 +51,9 @@ export async function updateSession(request: NextRequest) {
   const locale = localeFromPath(url.pathname)
   const stripped = stripLocale(url.pathname)
   const isAuthPage = stripped.startsWith('/login') || stripped.startsWith('/signup')
-  const isPublic = stripped === '/' || isAuthPage
+  const isPasswordRecovery =
+    stripped.startsWith('/forgot-password') || stripped.startsWith('/reset-password')
+  const isPublic = stripped === '/' || isAuthPage || isPasswordRecovery
 
   if (!user && !isPublic) {
     url.pathname = `/${locale}/login`

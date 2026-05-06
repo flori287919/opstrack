@@ -56,7 +56,17 @@
     "signupButton": "Create account",
     "noAccount": "No account?",
     "haveAccount": "Have an account?",
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "forgotPasswordLink": "Forgot password?",
+    "forgotPasswordTitle": "Reset your password",
+    "forgotPasswordDesc": "Enter your email. We'll send you a link to reset your password.",
+    "sendResetLink": "Send reset link",
+    "resetEmailSent": "If an account exists with this email, you'll receive a reset link. Check your inbox and spam folder.",
+    "backToLogin": "Back to sign in",
+    "resetPasswordTitle": "Set a new password",
+    "newPasswordLabel": "New password",
+    "updatePasswordButton": "Update password",
+    "passwordUpdatedInfo": "Password updated. Sign in with your new password."
   },
   "nav": {
     "dashboard": "Dashboard",

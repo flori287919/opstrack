@@ -56,7 +56,17 @@
     "signupButton": "Krijo llogari",
     "noAccount": "S'ke llogari?",
     "haveAccount": "Ke llogari?",
-    "logout": "Dil"
+    "logout": "Dil",
+    "forgotPasswordLink": "Harruat fjalëkalimin?",
+    "forgotPasswordTitle": "Rivendos fjalëkalimin",
+    "forgotPasswordDesc": "Vendosni email-in tuaj. Do t'ju dërgojmë një link për të rivendosur fjalëkalimin.",
+    "sendResetLink": "Dërgo linkun",
+    "resetEmailSent": "Nëse ekziston një llogari me këtë email, do të merrni një link për rivendosje. Kontrolloni inbox-in dhe spam-in.",
+    "backToLogin": "Kthehu te hyrja",
+    "resetPasswordTitle": "Vendos fjalëkalimin e ri",
+    "newPasswordLabel": "Fjalëkalimi i ri",
+    "updatePasswordButton": "Përditëso fjalëkalimin",
+    "passwordUpdatedInfo": "Fjalëkalimi u përditësua. Hyni me fjalëkalimin e ri."
   },
   "nav": {
     "dashboard": "Dashboard",

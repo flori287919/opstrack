@@ -8,13 +8,14 @@ export default async function LoginPage({
   searchParams,
 }: {
   params: Promise<{ lang: string }>
-  searchParams: Promise<{ error?: string }>
+  searchParams: Promise<{ error?: string; info?: string }>
 }) {
   const { lang } = await params
   if (!hasLocale(lang)) notFound()
   const t = await getDictionary(lang)
-  const { error } = await searchParams
+  const { error, info } = await searchParams
   const appName = t.appName
+  const infoMessage = info === 'password_updated' ? t.auth.passwordUpdatedInfo : null
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
@@ -23,6 +24,12 @@ export default async function LoginPage({
           <h1 className="text-2xl font-semibold text-slate-900">{appName}</h1>
           <p className="text-sm text-slate-500 mt-1">{t.auth.loginTitle}</p>
         </div>
+
+        {infoMessage && (
+          <div className="mb-4 p-3 rounded bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm">
+            {infoMessage}
+          </div>
+        )}
 
         {error && (
           <div className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm">
@@ -62,7 +69,13 @@ export default async function LoginPage({
           </button>
         </form>
 
-        <p className="text-sm text-center text-slate-600 mt-6">
+        <p className="text-sm text-center text-slate-600 mt-4">
+          <Link href={`/${lang}/forgot-password`} className="hover:underline">
+            {t.auth.forgotPasswordLink}
+          </Link>
+        </p>
+
+        <p className="text-sm text-center text-slate-600 mt-4">
           {t.auth.noAccount}{' '}
           <Link href={`/${lang}/signup`} className="text-slate-900 font-medium hover:underline">
             {t.auth.signupButton}
