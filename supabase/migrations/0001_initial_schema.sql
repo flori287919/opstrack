@@ -1,5 +1,5 @@
 -- ============================================================
--- Operations1 / OpsTrack — Initial schema
+-- Operations Management Application — Initial schema
 -- Multi-tenant via organizations + Row Level Security
 -- ============================================================
 
