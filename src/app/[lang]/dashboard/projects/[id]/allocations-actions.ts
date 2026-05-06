@@ -1,9 +1,9 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { friendlyError } from '@/lib/errors'
+import { redirectLocal } from '@/lib/locale'
 
 async function getOrgId() {
   const supabase = await createClient()
@@ -39,7 +39,7 @@ export async function createAllocation(projectId: string, fd: FormData) {
   const pct = num(fd.get('allocation_pct'))
 
   if (!personId || !startDate) {
-    redirect(
+    await redirectLocal(
       `/dashboard/projects/${projectId}?error=Personi%20dhe%20Start%20Date%20jane%20te%20detyrueshem`
     )
   }
@@ -57,11 +57,11 @@ export async function createAllocation(projectId: string, fd: FormData) {
 
   const { error } = await supabase.from('people_allocations').insert(payload)
   if (error) {
-    redirect(`/dashboard/projects/${projectId}?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/projects/${projectId}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath(`/dashboard/projects/${projectId}`)
   revalidatePath('/dashboard')
-  redirect(`/dashboard/projects/${projectId}`)
+  await redirectLocal(`/dashboard/projects/${projectId}`)
 }
 
 export async function softDeleteAllocation(projectId: string, allocationId: string) {
@@ -82,7 +82,7 @@ export async function createTimesheet(projectId: string, fd: FormData) {
   const hours = num(fd.get('hours'))
 
   if (!personId || !date || !hours || hours <= 0) {
-    redirect(
+    await redirectLocal(
       `/dashboard/projects/${projectId}?error=Personi%2C%20data%20dhe%20oret%20%28%3E0%29%20jane%20te%20detyrueshem`
     )
   }
@@ -96,10 +96,10 @@ export async function createTimesheet(projectId: string, fd: FormData) {
     description: str(fd.get('description')),
   })
   if (error) {
-    redirect(`/dashboard/projects/${projectId}?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/projects/${projectId}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath(`/dashboard/projects/${projectId}`)
-  redirect(`/dashboard/projects/${projectId}`)
+  await redirectLocal(`/dashboard/projects/${projectId}`)
 }
 
 export async function softDeleteTimesheet(projectId: string, timesheetId: string) {

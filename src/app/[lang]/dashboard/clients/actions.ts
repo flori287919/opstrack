@@ -1,9 +1,9 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { friendlyError } from '@/lib/errors'
+import { redirectLocal } from '@/lib/locale'
 
 async function getOrgId() {
   const supabase = await createClient()
@@ -36,7 +36,7 @@ export async function createClientRecord(fd: FormData) {
   const { supabase, orgId } = await getOrgId()
   const name = str(fd.get('name'))
   if (!name) {
-    redirect('/dashboard/clients?error=Emri%20eshte%20i%20detyrueshem')
+    await redirectLocal('/dashboard/clients?error=Emri%20eshte%20i%20detyrueshem')
   }
   const { error } = await supabase.from('clients').insert({
     org_id: orgId,
@@ -50,10 +50,10 @@ export async function createClientRecord(fd: FormData) {
     notes: str(fd.get('notes')),
   })
   if (error) {
-    redirect(`/dashboard/clients?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/clients?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/clients')
-  redirect('/dashboard/clients')
+  await redirectLocal('/dashboard/clients')
 }
 
 export async function softDeleteClient(id: string) {

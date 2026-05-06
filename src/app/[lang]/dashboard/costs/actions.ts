@@ -1,9 +1,9 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { friendlyError } from '@/lib/errors'
+import { redirectLocal } from '@/lib/locale'
 
 async function getOrgId() {
   const supabase = await createClient()
@@ -56,17 +56,17 @@ export async function createCostContract(fd: FormData) {
   const { supabase, orgId } = await getOrgId()
   const payload = buildContractPayload(fd)
   if (!payload.project_id || !payload.contract_name) {
-    redirect('/dashboard/costs/new?error=Projekti%20dhe%20Emri%20i%20kontrates%20jane%20te%20detyrueshem')
+    await redirectLocal('/dashboard/costs/new?error=Projekti%20dhe%20Emri%20i%20kontrates%20jane%20te%20detyrueshem')
   }
   const { error } = await supabase
     .from('cost_contracts')
     .insert({ ...payload, org_id: orgId })
   if (error) {
-    redirect(`/dashboard/costs/new?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/costs/new?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/costs')
   revalidatePath('/dashboard')
-  redirect('/dashboard/costs')
+  await redirectLocal('/dashboard/costs')
 }
 
 export async function updateCostContract(id: string, fd: FormData) {
@@ -74,11 +74,11 @@ export async function updateCostContract(id: string, fd: FormData) {
   const payload = buildContractPayload(fd)
   const { error } = await supabase.from('cost_contracts').update(payload).eq('id', id)
   if (error) {
-    redirect(`/dashboard/costs/${id}?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/costs/${id}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/costs')
   revalidatePath('/dashboard')
-  redirect(`/dashboard/costs/${id}`)
+  await redirectLocal(`/dashboard/costs/${id}`)
 }
 
 export async function softDeleteCostContract(id: string) {
@@ -90,7 +90,7 @@ export async function softDeleteCostContract(id: string) {
   if (error) throw new Error(error.message)
   revalidatePath('/dashboard/costs')
   revalidatePath('/dashboard')
-  redirect('/dashboard/costs')
+  await redirectLocal('/dashboard/costs')
 }
 
 export async function restoreCostContract(id: string) {
@@ -128,11 +128,11 @@ export async function createCostPayment(contractId: string, fd: FormData) {
     .from('cost_payments')
     .insert({ ...payload, org_id: orgId })
   if (error) {
-    redirect(`/dashboard/costs/${contractId}?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/costs/${contractId}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath(`/dashboard/costs/${contractId}`)
   revalidatePath('/dashboard')
-  redirect(`/dashboard/costs/${contractId}`)
+  await redirectLocal(`/dashboard/costs/${contractId}`)
 }
 
 export async function markPaymentPaid(paymentId: string, contractId: string, fd: FormData) {

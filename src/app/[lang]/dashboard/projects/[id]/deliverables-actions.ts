@@ -1,9 +1,9 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { friendlyError } from '@/lib/errors'
+import { redirectLocal } from '@/lib/locale'
 
 async function getOrgId() {
   const supabase = await createClient()
@@ -49,17 +49,17 @@ export async function createDeliverable(projectId: string, fd: FormData) {
   const { supabase, orgId } = await getOrgId()
   const payload = buildPayload(fd)
   if (!payload.code || !payload.name) {
-    redirect(`/dashboard/projects/${projectId}?error=Kodi%20dhe%20Emri%20jane%20te%20detyrueshem`)
+    await redirectLocal(`/dashboard/projects/${projectId}?error=Kodi%20dhe%20Emri%20jane%20te%20detyrueshem`)
   }
   const { error } = await supabase
     .from('deliverables')
     .insert({ ...payload, project_id: projectId, org_id: orgId })
   if (error) {
-    redirect(`/dashboard/projects/${projectId}?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/projects/${projectId}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath(`/dashboard/projects/${projectId}`)
   revalidatePath('/dashboard/invoices')
-  redirect(`/dashboard/projects/${projectId}`)
+  await redirectLocal(`/dashboard/projects/${projectId}`)
 }
 
 export async function updateDeliverable(projectId: string, deliverableId: string, fd: FormData) {
@@ -70,11 +70,11 @@ export async function updateDeliverable(projectId: string, deliverableId: string
     .update(payload)
     .eq('id', deliverableId)
   if (error) {
-    redirect(`/dashboard/projects/${projectId}?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/projects/${projectId}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath(`/dashboard/projects/${projectId}`)
   revalidatePath('/dashboard/invoices')
-  redirect(`/dashboard/projects/${projectId}`)
+  await redirectLocal(`/dashboard/projects/${projectId}`)
 }
 
 export async function setDeliverableStatus(

@@ -1,9 +1,9 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { friendlyError } from '@/lib/errors'
+import { redirectLocal } from '@/lib/locale'
 
 async function getOrgId() {
   const supabase = await createClient()
@@ -31,7 +31,7 @@ export async function createBL(fd: FormData) {
   const code = str(fd.get('code'))
   const name = str(fd.get('name'))
   if (!code || !name) {
-    redirect('/dashboard/lookups?error=Code%20dhe%20Name%20jane%20te%20detyrueshem')
+    await redirectLocal('/dashboard/lookups?error=Code%20dhe%20Name%20jane%20te%20detyrueshem')
   }
   const { error } = await supabase.from('business_lines').insert({
     org_id: orgId,
@@ -39,10 +39,10 @@ export async function createBL(fd: FormData) {
     name,
     description: str(fd.get('description')),
   })
-  if (error) redirect(`/dashboard/lookups?error=${encodeURIComponent(friendlyError(error))}`)
+  if (error) await redirectLocal(`/dashboard/lookups?error=${encodeURIComponent(friendlyError(error))}`)
   revalidatePath('/dashboard/lookups')
   revalidatePath('/dashboard/projects/new')
-  redirect('/dashboard/lookups')
+  await redirectLocal('/dashboard/lookups')
 }
 
 export async function deleteBL(id: string) {
@@ -54,16 +54,16 @@ export async function deleteBL(id: string) {
 export async function createBeneficiary(fd: FormData) {
   const { supabase, orgId } = await getOrgId()
   const name = str(fd.get('name'))
-  if (!name) redirect('/dashboard/lookups?error=Emri%20i%20detyrueshem')
+  if (!name) await redirectLocal('/dashboard/lookups?error=Emri%20i%20detyrueshem')
   const { error } = await supabase.from('beneficiaries').insert({
     org_id: orgId,
     name,
     country: str(fd.get('country')),
     notes: str(fd.get('notes')),
   })
-  if (error) redirect(`/dashboard/lookups?error=${encodeURIComponent(friendlyError(error))}`)
+  if (error) await redirectLocal(`/dashboard/lookups?error=${encodeURIComponent(friendlyError(error))}`)
   revalidatePath('/dashboard/lookups')
-  redirect('/dashboard/lookups')
+  await redirectLocal('/dashboard/lookups')
 }
 
 export async function deleteBeneficiary(id: string) {
@@ -75,16 +75,16 @@ export async function deleteBeneficiary(id: string) {
 export async function createPM(fd: FormData) {
   const { supabase, orgId } = await getOrgId()
   const name = str(fd.get('name'))
-  if (!name) redirect('/dashboard/lookups?error=Emri%20i%20detyrueshem')
+  if (!name) await redirectLocal('/dashboard/lookups?error=Emri%20i%20detyrueshem')
   const { error } = await supabase.from('project_managers').insert({
     org_id: orgId,
     name,
     email: str(fd.get('email')),
     role: str(fd.get('role')),
   })
-  if (error) redirect(`/dashboard/lookups?error=${encodeURIComponent(friendlyError(error))}`)
+  if (error) await redirectLocal(`/dashboard/lookups?error=${encodeURIComponent(friendlyError(error))}`)
   revalidatePath('/dashboard/lookups')
-  redirect('/dashboard/lookups')
+  await redirectLocal('/dashboard/lookups')
 }
 
 export async function deletePM(id: string) {

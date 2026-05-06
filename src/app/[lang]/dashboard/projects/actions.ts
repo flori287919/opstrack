@@ -1,9 +1,9 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { friendlyError } from '@/lib/errors'
+import { redirectLocal } from '@/lib/locale'
 
 async function getOrgId() {
   const supabase = await createClient()
@@ -66,17 +66,17 @@ export async function createProject(fd: FormData) {
   const { supabase, orgId } = await getOrgId()
   const payload = buildPayload(fd)
   if (!payload.project_code || !payload.name) {
-    redirect('/dashboard/projects/new?error=Project%20code%20dhe%20Name%20jane%20te%20detyrueshem')
+    await redirectLocal('/dashboard/projects/new?error=Project%20code%20dhe%20Name%20jane%20te%20detyrueshem')
   }
   const { error } = await supabase
     .from('projects')
     .insert({ ...payload, org_id: orgId })
   if (error) {
-    redirect(`/dashboard/projects/new?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/projects/new?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/projects')
   revalidatePath('/dashboard')
-  redirect('/dashboard/projects')
+  await redirectLocal('/dashboard/projects')
 }
 
 export async function updateProject(id: string, fd: FormData) {
@@ -87,11 +87,11 @@ export async function updateProject(id: string, fd: FormData) {
     .update(payload)
     .eq('id', id)
   if (error) {
-    redirect(`/dashboard/projects/${id}?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/projects/${id}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/projects')
   revalidatePath('/dashboard')
-  redirect(`/dashboard/projects/${id}`)
+  await redirectLocal(`/dashboard/projects/${id}`)
 }
 
 export async function softDeleteProject(id: string) {
@@ -103,7 +103,7 @@ export async function softDeleteProject(id: string) {
   if (error) throw new Error(error.message)
   revalidatePath('/dashboard/projects')
   revalidatePath('/dashboard')
-  redirect('/dashboard/projects')
+  await redirectLocal('/dashboard/projects')
 }
 
 export async function restoreProject(id: string) {

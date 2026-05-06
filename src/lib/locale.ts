@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 const LOCALES = ['sq', 'en'] as const
 export const DEFAULT_LOCALE = 'sq'
@@ -16,4 +17,8 @@ export async function localePath(path: string): Promise<string> {
   const lang = await currentLocale()
   if (path.startsWith('/')) return `/${lang}${path === '/' ? '' : path}`
   return `/${lang}/${path}`
+}
+
+export async function redirectLocal(path: string): Promise<never> {
+  redirect(await localePath(path))
 }

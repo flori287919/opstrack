@@ -1,9 +1,9 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { friendlyError } from '@/lib/errors'
+import { redirectLocal } from '@/lib/locale'
 
 async function getOrgId() {
   const supabase = await createClient()
@@ -52,14 +52,14 @@ export async function createPerson(fd: FormData) {
   const { supabase, orgId } = await getOrgId()
   const payload = buildPayload(fd)
   if (!payload.name) {
-    redirect('/dashboard/people?error=Emri%20eshte%20i%20detyrueshem')
+    await redirectLocal('/dashboard/people?error=Emri%20eshte%20i%20detyrueshem')
   }
   const { error } = await supabase.from('people').insert({ ...payload, org_id: orgId })
   if (error) {
-    redirect(`/dashboard/people?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/people?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/people')
-  redirect('/dashboard/people')
+  await redirectLocal('/dashboard/people')
 }
 
 export async function updatePerson(id: string, fd: FormData) {
@@ -67,11 +67,11 @@ export async function updatePerson(id: string, fd: FormData) {
   const payload = buildPayload(fd)
   const { error } = await supabase.from('people').update(payload).eq('id', id)
   if (error) {
-    redirect(`/dashboard/people/${id}?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/people/${id}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/people')
   revalidatePath(`/dashboard/people/${id}`)
-  redirect(`/dashboard/people/${id}`)
+  await redirectLocal(`/dashboard/people/${id}`)
 }
 
 export async function softDeletePerson(id: string) {
@@ -82,5 +82,5 @@ export async function softDeletePerson(id: string) {
     .eq('id', id)
   if (error) throw new Error(error.message)
   revalidatePath('/dashboard/people')
-  redirect('/dashboard/people')
+  await redirectLocal('/dashboard/people')
 }

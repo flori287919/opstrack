@@ -1,9 +1,9 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { friendlyError } from '@/lib/errors'
+import { redirectLocal } from '@/lib/locale'
 
 async function getOrgId() {
   const supabase = await createClient()
@@ -53,15 +53,15 @@ export async function createInvoice(fd: FormData) {
   const { supabase, orgId } = await getOrgId()
   const payload = buildPayload(fd)
   if (!payload.project_id) {
-    redirect('/dashboard/invoices/new?error=Zgjidh%20nje%20projekt')
+    await redirectLocal('/dashboard/invoices/new?error=Zgjidh%20nje%20projekt')
   }
   const { error } = await supabase.from('invoices').insert({ ...payload, org_id: orgId })
   if (error) {
-    redirect(`/dashboard/invoices/new?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/invoices/new?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/invoices')
   revalidatePath('/dashboard')
-  redirect('/dashboard/invoices')
+  await redirectLocal('/dashboard/invoices')
 }
 
 export async function updateInvoice(id: string, fd: FormData) {
@@ -69,11 +69,11 @@ export async function updateInvoice(id: string, fd: FormData) {
   const payload = buildPayload(fd)
   const { error } = await supabase.from('invoices').update(payload).eq('id', id)
   if (error) {
-    redirect(`/dashboard/invoices/${id}?error=${encodeURIComponent(friendlyError(error))}`)
+    await redirectLocal(`/dashboard/invoices/${id}?error=${encodeURIComponent(friendlyError(error))}`)
   }
   revalidatePath('/dashboard/invoices')
   revalidatePath('/dashboard')
-  redirect(`/dashboard/invoices/${id}`)
+  await redirectLocal(`/dashboard/invoices/${id}`)
 }
 
 export async function softDeleteInvoice(id: string) {
@@ -85,7 +85,7 @@ export async function softDeleteInvoice(id: string) {
   if (error) throw new Error(error.message)
   revalidatePath('/dashboard/invoices')
   revalidatePath('/dashboard')
-  redirect('/dashboard/invoices')
+  await redirectLocal('/dashboard/invoices')
 }
 
 export async function restoreInvoice(id: string) {
@@ -108,5 +108,5 @@ export async function markInvoicePaid(id: string, fd: FormData) {
   if (error) throw new Error(error.message)
   revalidatePath('/dashboard/invoices')
   revalidatePath('/dashboard')
-  redirect(`/dashboard/invoices/${id}`)
+  await redirectLocal(`/dashboard/invoices/${id}`)
 }
