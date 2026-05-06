@@ -114,7 +114,15 @@
     "noAlarms": "Asnjë alarm aktiv — të gjitha faturat brenda termit.",
     "overdueMessage": "{count} fatura të papaguara kanë kaluar datën e arkëtimit. Hap \"Faturat\" për listën e plotë.",
     "cashFlow30": "Cash Flow 30 ditët e ardhshme",
-    "invoicingVsCollection": "Faturim vs Arkëtim — 12 muaj"
+    "invoicingVsCollection": "Faturim vs Arkëtim — 12 muaj",
+    "topClientsTitle": "Top 10 klientë — Collection Delta",
+    "topClientsSubtitle": "Mesatarja e ditëve nga data e planifikuar e arkëtimit deri te data reale (12 muajt e fundit). E kuqe = paguajnë me vonesë, e gjelbër = paguajnë para kohe.",
+    "topClientsEmpty": "Pa të dhëna akoma. Sapo të arkëtosh fatura me Collection Date dhe Planned Collection Date, klientët do të shfaqen këtu.",
+    "topClientsInvoicesCount": "Fatura",
+    "topClientsTotalAmount": "Totali",
+    "topClientsDaysLate": "ditë vonesë",
+    "topClientsDaysEarly": "ditë para",
+    "topClientsAvgDelta": "Delta mesatare (ditë)"
   },
   "projects": {
     "title": "Projektet",
