@@ -34,7 +34,7 @@ export default async function DashboardLayout({
 
   const superAdmin = isSuperAdmin(user.email)
 
-  const appName = process.env.NEXT_PUBLIC_APP_NAME || t.appName
+  const appName = t.appName
 
   const { data: orgs } = await supabase
     .from('organizations')

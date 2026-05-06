@@ -27,7 +27,7 @@ export default async function PendingPage({
     .maybeSingle()
   if (member?.approved) redirect(`/${lang}/dashboard`)
 
-  const appName = process.env.NEXT_PUBLIC_APP_NAME || t.appName
+  const appName = t.appName
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">

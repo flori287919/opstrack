@@ -14,7 +14,7 @@ export default async function LoginPage({
   if (!hasLocale(lang)) notFound()
   const t = await getDictionary(lang)
   const { error } = await searchParams
-  const appName = process.env.NEXT_PUBLIC_APP_NAME || t.appName
+  const appName = t.appName
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">

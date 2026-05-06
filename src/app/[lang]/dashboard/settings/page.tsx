@@ -39,7 +39,7 @@ export default async function SettingsPage({
         </Card>
 
         <Card title={t.settings.aboutApp}>
-          <Row label={t.settings.appName} value={process.env.NEXT_PUBLIC_APP_NAME || t.appName} />
+          <Row label={t.settings.appName} value={t.appName} />
           <Row label={t.settings.version} value="0.1.0 (MVP)" />
         </Card>
       </div>
