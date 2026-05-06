@@ -344,6 +344,9 @@
     "userId": "User ID",
     "director": "Drejtor",
     "appName": "App Name",
-    "version": "Versioni"
+    "version": "Versioni",
+    "dataExport": "Eksportim i të dhënave",
+    "dataExportDesc": "Shkarko të gjitha të dhënat e organizatës tënde si JSON. Përfshin klientët, projektet, faturat, kostot, njerëzit dhe audit log-un.",
+    "dataExportButton": "Shkarko të dhënat (JSON)"
   }
 }

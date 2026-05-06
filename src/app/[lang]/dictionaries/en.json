@@ -344,6 +344,9 @@
     "userId": "User ID",
     "director": "Director",
     "appName": "App name",
-    "version": "Version"
+    "version": "Version",
+    "dataExport": "Data export",
+    "dataExportDesc": "Download all your organization's data as JSON. Includes clients, projects, invoices, costs, people, and the audit log.",
+    "dataExportButton": "Download data (JSON)"
   }
 }

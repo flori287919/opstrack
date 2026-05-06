@@ -42,6 +42,16 @@ export default async function SettingsPage({
           <Row label={t.settings.appName} value={t.appName} />
           <Row label={t.settings.version} value="0.1.0 (MVP)" />
         </Card>
+
+        <Card title={t.settings.dataExport}>
+          <p className="text-sm text-slate-600">{t.settings.dataExportDesc}</p>
+          <a
+            href="/api/export/org"
+            className="inline-block mt-3 px-4 py-2 text-sm font-medium bg-slate-900 text-white rounded-lg hover:bg-slate-800"
+          >
+            {t.settings.dataExportButton}
+          </a>
+        </Card>
       </div>
     </div>
   )
