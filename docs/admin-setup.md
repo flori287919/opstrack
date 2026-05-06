@@ -134,7 +134,86 @@ Albanian.
 
 ---
 
-## 3. Common runbook tasks
+## 3. Daily overdue-invoices email digest
+
+A Vercel Cron job runs once a day and sends every approved org member an
+email summarising overdue invoices for their org.
+
+### Schedule
+
+`vercel.json` schedules `/api/cron/overdue-invoices` at `0 6 * * *` (06:00
+UTC = 07:00 Tirana in winter, 08:00 Tirana in summer). Adjust the cron
+expression in `vercel.json` if you want a different time. Vercel cron uses
+UTC.
+
+### Required environment variables
+
+Set these on Vercel (Settings → Environment Variables) for **Production**:
+
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Already set for the app |
+| `SUPABASE_SERVICE_ROLE_KEY` | From Supabase → Settings → API → `service_role` key. **Never expose to the client.** |
+| `CRON_SECRET` | Random secret. Generate with `openssl rand -hex 32`. Vercel sends it in the `Authorization` header when triggering the cron. |
+| `RESEND_API_KEY` | From Resend dashboard (same key used in section 2 SMTP setup is fine). |
+| `EMAIL_FROM` | `"OpsTrack <noreply@yourdomain.al>"` — must use a domain you've verified in Resend. |
+| `NEXT_PUBLIC_APP_URL` | `https://opstrack-xi.vercel.app` (used to build "Open invoices" links in the email). |
+
+After adding them, redeploy. The cron is registered automatically at deploy
+time via `vercel.json`.
+
+### What it sends
+
+Per org with one or more overdue invoices: a single HTML email to every
+**approved** `org_member`, with subject:
+
+```
+{Org Name} — N fatura overdue (€XXX)
+```
+
+Body lists each invoice with: number, client, project, amount, days
+overdue. A button links to `/sq/dashboard/invoices?filter=overdue`.
+
+If an org has zero overdue invoices, no email is sent.
+
+### Testing
+
+Trigger manually via curl (replace placeholders):
+
+```bash
+curl -i -H "Authorization: Bearer $CRON_SECRET" \
+  https://opstrack-xi.vercel.app/api/cron/overdue-invoices
+```
+
+Expected response:
+
+```json
+{
+  "ok": true,
+  "orgs": 1,
+  "sent": 1,
+  "skipped": 0,
+  "errors": 0,
+  "results": [...]
+}
+```
+
+If `sent` is 0 but you expected emails, check Vercel logs and Resend
+dashboard logs for delivery errors.
+
+### Security notes
+
+- The route returns `401` for any request without the matching
+  `Authorization: Bearer <CRON_SECRET>` header. Vercel attaches it
+  automatically for cron-triggered invocations.
+- The service-role key bypasses RLS — guard it carefully. It is only used
+  inside the cron route to query across all orgs.
+- Recipients are derived from `org_members.approved = true`. Unapproved
+  members never receive overdue emails (they shouldn't have access yet).
+
+---
+
+## 4. Common runbook tasks
 
 ### Reset a user's password manually
 
