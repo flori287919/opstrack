@@ -22,9 +22,11 @@ function pickLocale(request: NextRequest): string {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Skip API routes — they don't need a locale prefix.
+  // API routes bypass locale + auth gating entirely.
+  // Each handler enforces its own auth (Bearer token for /api/cron/*,
+  // session cookie for /api/export/*, self-verifying token for /api/auth/confirm).
   if (pathname.startsWith('/api/')) {
-    return await updateSession(request)
+    return NextResponse.next()
   }
 
   // Already prefixed with a locale → just refresh Supabase session.
