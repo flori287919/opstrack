@@ -76,6 +76,7 @@
     "people": "People",
     "clients": "Clients",
     "lookups": "Master data",
+    "import": "Import Excel",
     "audit": "History",
     "settings": "Settings",
     "admin": "Admin"
@@ -350,6 +351,56 @@
       "people": "People",
       "people_allocations": "Allocations",
       "timesheets": "Timesheets"
+    }
+  },
+  "import": {
+    "title": "Import from Excel",
+    "subtitle": "Bulk-load data from Excel files. Each section has its own template — download, fill, upload.",
+    "order": "Recommended order: 1) Master Data (BL, Beneficiaries, PMs) → 2) Clients → 3) People → 4) Projects → 5) Invoices → 6) Cost contracts → 7) Payments / Allocations / Timesheets.",
+    "download": "Download template",
+    "upload": "Choose Excel file",
+    "preview": "Preview",
+    "commit": "Import",
+    "reset": "Cancel",
+    "noFile": "No file selected",
+    "loading": "Processing...",
+    "errors": "Errors",
+    "validRows": "Valid",
+    "totalRows": "Total rows",
+    "insertedOk": "Rows inserted",
+    "group": {
+      "lookups": "Master Data",
+      "clients": "Clients",
+      "people": "People",
+      "projects": "Projects",
+      "invoices": "Invoices",
+      "costs": "Costs"
+    },
+    "entity": {
+      "business_lines": "Business Lines",
+      "beneficiaries": "Beneficiaries",
+      "project_managers": "Project Managers",
+      "clients": "Clients",
+      "people": "People",
+      "projects": "Projects",
+      "invoices": "Invoices",
+      "cost_contracts": "Cost Contracts",
+      "cost_payments": "Cost Payments",
+      "allocations": "Allocations",
+      "timesheets": "Timesheets"
+    },
+    "hint": {
+      "business_lines": "Business lines (BL). No dependencies.",
+      "beneficiaries": "Beneficiaries (companies receiving the work). No dependencies.",
+      "project_managers": "Project Managers. No dependencies.",
+      "clients": "Clients with their payment terms. No dependencies.",
+      "people": "Staff with cost rates. No dependencies.",
+      "projects": "Projects — require Clients, BL, Beneficiaries and PMs to exist first.",
+      "invoices": "Invoices — require Projects (referenced by Project Code).",
+      "cost_contracts": "Subcontractor cost contracts — require Projects.",
+      "cost_payments": "Subcontractor payments — require Cost Contracts (referenced by Project Code + Contract Name).",
+      "allocations": "People allocations to projects — require People and Projects.",
+      "timesheets": "Hours logged by staff on projects — require People and Projects."
     }
   },
   "settings": {

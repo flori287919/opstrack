@@ -76,6 +76,7 @@
     "people": "Stafi",
     "clients": "Klientët",
     "lookups": "Master Data",
+    "import": "Import Excel",
     "audit": "Histori",
     "settings": "Settings",
     "admin": "Admin"
@@ -350,6 +351,56 @@
       "people": "Stafi",
       "people_allocations": "Alokimet",
       "timesheets": "Timesheets"
+    }
+  },
+  "import": {
+    "title": "Import nga Excel",
+    "subtitle": "Ngarko të dhëna në bllok nga fajllat Excel. Çdo kategori ka shabllonin e vet — shkarkoje, plotësoje, ngjite.",
+    "order": "Rekomandohet ky rend: 1) Master Data (BL, Beneficiarë, PMs) → 2) Klientë → 3) Stafi → 4) Projektet → 5) Faturat → 6) Kontratat → 7) Pagesat / Alokimet / Timesheets.",
+    "download": "Shkarko shabllonin",
+    "upload": "Zgjidh fajllin Excel",
+    "preview": "Verifiko",
+    "commit": "Importo",
+    "reset": "Anulo",
+    "noFile": "Asnjë fajll i zgjedhur",
+    "loading": "Po procesohet...",
+    "errors": "Gabime",
+    "validRows": "Të vlefshme",
+    "totalRows": "Total rreshta",
+    "insertedOk": "U ruajtën rreshta",
+    "group": {
+      "lookups": "Master Data",
+      "clients": "Klientë",
+      "people": "Staf",
+      "projects": "Projekte",
+      "invoices": "Fatura",
+      "costs": "Kosto"
+    },
+    "entity": {
+      "business_lines": "Business Lines",
+      "beneficiaries": "Beneficiarët",
+      "project_managers": "Project Managers",
+      "clients": "Klientët",
+      "people": "Stafi",
+      "projects": "Projektet",
+      "invoices": "Faturat",
+      "cost_contracts": "Kontratat e kostove",
+      "cost_payments": "Pagesat e kostove",
+      "allocations": "Alokimet",
+      "timesheets": "Timesheets"
+    },
+    "hint": {
+      "business_lines": "Linjat e biznesit (BL). Pa varësi.",
+      "beneficiaries": "Beneficiarët (kompanitë që marrin punën). Pa varësi.",
+      "project_managers": "Project Managers. Pa varësi.",
+      "clients": "Klientët dhe termat e tyre të pagesës. Pa varësi.",
+      "people": "Stafi me tarifat e kostos. Pa varësi.",
+      "projects": "Projektet — kërkojnë që Klientët, BL, Beneficiarët dhe PM-të të jenë krijuar tashmë.",
+      "invoices": "Faturat — kërkojnë që Projektet të jenë krijuar tashmë (referenca me Project Code).",
+      "cost_contracts": "Kontratat me subkontraktorët — kërkojnë Projektet.",
+      "cost_payments": "Pagesat ndaj subkontraktorëve — kërkojnë Kontratat (referenca me Project Code + Emri i kontratës).",
+      "allocations": "Alokimet e stafit në projekte — kërkojnë Stafin dhe Projektet.",
+      "timesheets": "Orët e regjistruara nga stafi në projekte — kërkojnë Stafin dhe Projektet."
     }
   },
   "settings": {
