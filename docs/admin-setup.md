@@ -103,17 +103,27 @@ and can land in spam. The fix is to plug Resend into Supabase's Custom SMTP.
 
 The email should arrive from `noreply@yourdomain.al` (not the Supabase domain).
 
-### Step 5 — customize email templates
+### Step 5 — install the Albanian email templates
 
-While you're in **Authentication → Email Templates**, edit the templates for:
+Pre-translated templates ship with the repo at
+[`supabase/email-templates/sq/`](../supabase/email-templates/sq/). They cover:
 
 - Confirm signup
 - Reset password
 - Magic link
-- Email change
+- Invite user
+- Change email address
+- Reauthentication
 
-Use the `appName` from the dictionary in your subject lines, and translate the
-SQ/EN copy if you want bilingual emails (Supabase doesn't auto-localize).
+Open the README at that path for step-by-step paste instructions. Each `.html`
+file has the **Subject** at the top in a comment and the **Body** below the
+`<!-- BODY -->` divider. Paste them into the matching template in
+**Authentication → Email Templates** in the Supabase dashboard.
+
+Supabase doesn't auto-localize, so this gives all auth emails an Albanian
+voice consistent with the app UI. If you later need bilingual emails (sq+en
+side by side), duplicate the body and add the English copy below the
+Albanian.
 
 ### Cost notes
 
