@@ -18,7 +18,7 @@ test.describe('Login form', () => {
 
   test('exposes a sign-up link', async ({ page }) => {
     await page.goto('/sq/login')
-    await page.getByRole('link', { name: /Regjistrohu/i }).click()
+    await page.getByRole('link', { name: /Krijo llogari/i }).click()
     await expect(page).toHaveURL(/\/signup/)
   })
 })

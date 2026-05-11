@@ -35,10 +35,11 @@ export default async function ResetPasswordPage({
 
         <form action={setNewPassword.bind(null, lang)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="reset-password" className="block text-sm font-medium text-slate-700 mb-1">
               {t.auth.newPasswordLabel}
             </label>
             <input
+              id="reset-password"
               name="password"
               type="password"
               required
@@ -47,10 +48,11 @@ export default async function ResetPasswordPage({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="reset-password-confirm" className="block text-sm font-medium text-slate-700 mb-1">
               {t.auth.passwordConfirmLabel}
             </label>
             <input
+              id="reset-password-confirm"
               name="confirm"
               type="password"
               required

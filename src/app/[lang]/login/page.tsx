@@ -39,10 +39,11 @@ export default async function LoginPage({
 
         <form action={login} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="login-email" className="block text-sm font-medium text-slate-700 mb-1">
               {t.auth.emailLabel}
             </label>
             <input
+              id="login-email"
               name="email"
               type="email"
               required
@@ -50,10 +51,11 @@ export default async function LoginPage({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="login-password" className="block text-sm font-medium text-slate-700 mb-1">
               {t.auth.passwordLabel}
             </label>
             <input
+              id="login-password"
               name="password"
               type="password"
               required
