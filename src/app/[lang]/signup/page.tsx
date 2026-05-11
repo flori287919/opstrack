@@ -32,10 +32,11 @@ export default async function SignupPage({
 
         <form action={signup} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="signup-org" className="block text-sm font-medium text-slate-700 mb-1">
               {t.auth.orgNameLabel}
             </label>
             <input
+              id="signup-org"
               name="orgName"
               type="text"
               required
@@ -43,10 +44,11 @@ export default async function SignupPage({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="signup-email" className="block text-sm font-medium text-slate-700 mb-1">
               {t.auth.emailLabel}
             </label>
             <input
+              id="signup-email"
               name="email"
               type="email"
               required
@@ -54,10 +56,11 @@ export default async function SignupPage({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="signup-password" className="block text-sm font-medium text-slate-700 mb-1">
               {t.auth.passwordLabel}
             </label>
             <input
+              id="signup-password"
               name="password"
               type="password"
               required
@@ -66,10 +69,11 @@ export default async function SignupPage({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label htmlFor="signup-password-confirm" className="block text-sm font-medium text-slate-700 mb-1">
               {t.auth.passwordConfirmLabel}
             </label>
             <input
+              id="signup-password-confirm"
               name="password_confirm"
               type="password"
               required

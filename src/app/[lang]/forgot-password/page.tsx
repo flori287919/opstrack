@@ -35,10 +35,11 @@ export default async function ForgotPasswordPage({
             )}
             <form action={requestReset.bind(null, lang)} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
+                <label htmlFor="forgot-email" className="block text-sm font-medium text-slate-700 mb-1">
                   {t.auth.emailLabel}
                 </label>
                 <input
+                  id="forgot-email"
                   name="email"
                   type="email"
                   required
